@@ -1,0 +1,324 @@
+paths:
+  /permissionTypes:
+     post:
+      security:
+        - bearerAuth: []
+      tags: 
+        - PermissionTypes
+      summary: Add new permission.
+      operationId: addNewPermission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddPermissionReqObj"
+      responses:
+        200:
+          description: Add new permission.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    exaple: 200
+                  response:
+                    type: String
+                    example: success
+                  msg:
+                    type: String
+                    example: Permission has been added.
+                  permissionTypeId:
+                    type: integer
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+     get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive all permissions.
+      operationId: fetchAllPermission
+      tags:
+        - PermissionTypes
+      parameters:
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Permission-List
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/PermissionList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /permissionTypes/{permissionTypeId}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive specific permission.
+      operationId: fetchSpecificPermissionData
+      tags:
+       - PermissionTypes
+      parameters:
+        - in: path
+          name: permissionTypeId
+          description: Permission-ID to fetch specific permission data with the associations.
+          required: true
+          schema:
+            type: string
+            example: 1
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Permission-Data
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/PermissionData"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - PermissionTypes
+      summary: Update an existing permission data.
+      operationId: updatePermissionData
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: permissionTypeId
+          description: Permission-ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddPermissionReqObj"
+      responses:
+        200:
+          description: Update permission data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  response:
+                    type: string
+                    example: success
+                  msg:
+                    type: string
+                    example: Permission data updated successfully. 
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+       - PermissionTypes
+      summary: Delete permission Record.
+      operationId: deletePermissionRecord
+      parameters:
+        - in: path
+          name: permissionTypeId
+          description: PermissionType_ID(permissionTypeId)
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Delete permission Record.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/definitions/successRes"
+                  - $ref: "#/definitions/invalidRes"
+                  - $ref: "#/definitions/errorRes"
+              examples:
+                success:
+                  summary: Example of successful response.
+                  value:
+                    status: 200
+                    response: success
+                    msg: Permission has been deleted successfully.
+                invalidId:
+                  summary: Example of invalid response.
+                  value:
+                    status: 401
+                    response: validationerror
+                    msg: Invalid operation.
+                error:
+                  summary: Example of error response.
+                  value:
+                    status: 400
+                    responses: error
+                    msg: Some thing went wrong.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+definitions:
+  PermissionData:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      Permission:
+        type: object
+        properties:
+          permissionTypeId:
+            type: integer
+          permissionName:
+            type: string
+          createdAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+          updatedAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+  AddPermissionReqObj:
+    type: object
+    properties:
+      permissionName:
+        type: string
+  PermissionObj:
+    type: array
+    items:
+      type: object
+      properties:
+        permissionTypeId:
+          type: integer
+        permissionName:
+          type: string
+  PermissionList:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      Permissions:
+        $ref: "#/definitions/PermissionObj"
+  Error:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: error
+      msg:
+        type: string
+        example: Some thing went wrong.
+      error:
+        type: object
+        properties:
+          name:
+            type: string
+          errors:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+  successRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      msg:
+        type: string
+        example: Permission has been deleted successfully.
+  invalidRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: invailid
+      msg:
+        type: string
+        example: Invailid AdvisorID.
+  errorRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 500
+      response:
+        type: string
+        rxample: error
+      msg:
+        type: string
+        example: Some thing went wrong.

@@ -1,0 +1,330 @@
+paths:
+  /groups:
+     post:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Groups
+      summary: Add new group.
+      operationId: addNewGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddGroupReqObj"
+      responses:
+        200:
+          description: Add new group.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    exaple: 200
+                  response:
+                    type: String
+                    example: success
+                  msg:
+                    type: String
+                    example: Group has been added.
+                  groupId:
+                    type: integer
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+     get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive all group.
+      operationId: fetchAllGroup
+      tags:
+        - Groups
+      parameters:
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Group-List
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/GroupList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /groups/{groupId}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive specific group.
+      operationId: fetchSpecificGroupData
+      tags:
+        - Groups
+      parameters:
+        - in: path
+          name: groupId
+          description: Group-ID to fetch specific group data with the associations.
+          required: true
+          schema:
+            type: string
+            example: 1
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Group-Data
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/GroupData"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Groups
+      summary: Update an existing group data.
+      operationId: updateGroupData
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: groupId
+          description: Group-ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddGroupReqObj"
+      responses:
+        200:
+          description: Update group data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  response:
+                    type: string
+                    example: success
+                  msg:
+                    type: string
+                    example: Group record data successfully. 
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+       - Groups
+      summary: Delete Group Record.
+      operationId: deleteGroupRecord
+      parameters:
+        - in: path
+          name: groupId
+          description: Group_ID(groupId)
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Delete Group Record.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/definitions/successRes"
+                  - $ref: "#/definitions/invalidRes"
+                  - $ref: "#/definitions/errorRes"
+              examples:
+                success:
+                  summary: Example of successful response.
+                  value:
+                    status: 200
+                    response: success
+                    msg: Group has been deleted successfully.
+                invalidId:
+                  summary: Example of invalid response.
+                  value:
+                    status: 401
+                    response: validationerror
+                    msg: Invalid operation.
+                error:
+                  summary: Example of error response.
+                  value:
+                    status: 400
+                    responses: error
+                    msg: Some thing went wrong.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+definitions:
+  GroupData:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      group:
+        type: object
+        properties:
+          groupId:
+            type: integer
+          groupName:
+            type: string
+          createdAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+          updatedAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+  AddGroupReqObj:
+    type: object
+    properties:
+      groupName:
+        type: string
+  GroupObj:
+    type: array
+    items:
+      type: object
+      properties:
+        groupId:
+          type: integer
+        groupName:
+          type: string
+        createdAt:
+          type: date
+          example: "2021-08-12T15:42:52.000Z"
+        updatedAt:
+          type: date
+          example: "2021-08-12T15:42:52.000Z"
+  GroupList:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      groups:
+        $ref: "#/definitions/GroupObj"
+  Error:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: error
+      msg:
+        type: string
+        example: Some thing went wrong.
+      error:
+        type: object
+        properties:
+          name:
+            type: string
+          errors:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+  successRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      msg:
+        type: string
+        example: Group has been deleted successfully.
+  invalidRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: invailid
+      msg:
+        type: string
+        example: Invailid AdvisorID.
+  errorRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 500
+      response:
+        type: string
+        rxample: error
+      msg:
+        type: string
+        example: Some thing went wrong.

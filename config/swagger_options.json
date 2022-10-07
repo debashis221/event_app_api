@@ -1,0 +1,29 @@
+{
+    "options": {
+        "definition": {
+            "openapi": "3.0.0",
+            "info": {
+                "title": "VocalHub APIs",
+                "version": "0.0.1",
+                "description": "REST APIs for VocalHub Project."
+            },
+            "servers": [{
+                    "url": "http://localhost:3000/api/v1",
+                    "description": "local"
+                },
+                {
+                    "url": "http://54.148.194.189:3000/api/v1",
+                    "description": "development"
+                },
+                {
+                    "url": "http://localhost:3000/api/v3",
+                    "description": "test"
+                },
+                {
+                    "url": "http://localhost:3000/api/v4",
+                    "description": "uat"
+                }
+            ]
+        }
+    }
+}

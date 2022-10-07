@@ -1,0 +1,336 @@
+paths:
+  /tabs:
+     post:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Tabs
+      summary: Add new tab.
+      operationId: addNewTab
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddTabReqObj"
+      responses:
+        200:
+          description: Add new tab.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    exaple: 200
+                  response:
+                    type: String
+                    example: success
+                  msg:
+                    type: String
+                    example: Tab has been added.
+                  tabId:
+                    type: integer
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+     get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive all tabs.
+      operationId: fetchAllTab
+      tags:
+        - Tabs
+      parameters:
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Tab-List
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/TabList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /tabs/{tabId}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive specific tab.
+      operationId: fetchSpecificTabData
+      tags:
+       - Tabs
+      parameters:
+        - in: path
+          name: tabId
+          description: Tab-ID to fetch specific tab data with the associations.
+          required: true
+          schema:
+            type: string
+            example: 1
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Tab-Data
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/TabData"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Tabs
+      summary: Update an existing tab data.
+      operationId: updateTabData
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: tabId
+          description: Tab-ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddTabReqObj"
+      responses:
+        200:
+          description: Update tab data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  response:
+                    type: string
+                    example: success
+                  msg:
+                    type: string
+                    example: Tab data updated successfully. 
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+       - Tabs
+      summary: Delete Tab Record.
+      operationId: deleteTabRecord
+      parameters:
+        - in: path
+          name: tabId
+          description: Tab_ID(tabId)
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Delete Tab Record.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/definitions/successRes"
+                  - $ref: "#/definitions/invalidRes"
+                  - $ref: "#/definitions/errorRes"
+              examples:
+                success:
+                  summary: Example of successful response.
+                  value:
+                    status: 200
+                    response: success
+                    msg: Tab has been deleted successfully.
+                invalidId:
+                  summary: Example of invalid response.
+                  value:
+                    status: 401
+                    response: validationerror
+                    msg: Invalid operation.
+                error:
+                  summary: Example of error response.
+                  value:
+                    status: 400
+                    responses: error
+                    msg: Some thing went wrong.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+definitions:
+  TabData:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      tab:
+        type: object
+        properties:
+          tabId:
+            type: integer
+          tabName:
+            type: string
+          tabCode:
+            type: string
+          logo:
+            type: string
+          createdAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+          updatedAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+  AddTabReqObj:
+    type: object
+    properties:
+      tabName:
+        type: string
+      tabCode:
+        type: string
+      logo:
+        type: string
+  TabObj:
+    type: array
+    items:
+      type: object
+      properties:
+        tabId:
+          type: integer
+        tabName:
+          type: string
+        tabCode:
+          type: string
+        logo:
+          type: string
+  TabList:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      tabs:
+        $ref: "#/definitions/TabObj"
+  Error:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: error
+      msg:
+        type: string
+        example: Some thing went wrong.
+      error:
+        type: object
+        properties:
+          name:
+            type: string
+          errors:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+  successRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      msg:
+        type: string
+        example: Tab has been deleted successfully.
+  invalidRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: invailid
+      msg:
+        type: string
+        example: Invailid AdvisorID.
+  errorRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 500
+      response:
+        type: string
+        rxample: error
+      msg:
+        type: string
+        example: Some thing went wrong.

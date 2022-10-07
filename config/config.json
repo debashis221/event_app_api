@@ -1,0 +1,172 @@
+{
+    "local": {
+        "username": "root",
+        "password": "",
+        "database": "excite_event",
+        "host": "localhost",
+        "instancename": "",
+        "port": "3306",
+        "dialect": "mysql",
+        "pool": {
+            "max": 9,
+            "idle": 9,
+            "acquire": 200000
+        },
+        "define": {
+            "underscored": false,
+            "freezetablename": false,
+            "charset": "uth9",
+            "dialectOptions": {
+                "collate": "uth9_general_ci"
+            },
+            "timestamps": false
+        },
+        "logging": false,
+        "oauth_publicky": "",
+        "token": {
+            "token_host": "",
+            "token_end_point": "",
+            "token_req_body": {
+                "client_id": "",
+                "client_secret": "",
+                "grant_type": ""
+            }
+        }
+    },
+    "development": {
+        "username": "root",
+        "password": "",
+        "database": "tezpayments",
+        "host": "54.148.194.189",
+        "instancename": "",
+        "port": "3306",
+        "dialect": "mysql",
+        "pool": {
+            "max": 9,
+            "idle": 9,
+            "acquire": 200000
+        },
+        "define": {
+            "underscored": false,
+            "freezetablename": false,
+            "charset": "uth9",
+            "dialectOptions": {
+                "collate": "uth9_general_ci"
+            },
+            "timestamps": false
+        },
+        "logging": false,
+        "oauth_publicky": "",
+        "token": {
+            "token_host": "",
+            "token_end_point": "",
+            "token_req_body": {
+                "client_id": "",
+                "client_secret": "",
+                "grant_type": ""
+            }
+        }
+    },
+    "test": {
+        "username": "root",
+        "password": "",
+        "database": "its",
+        "host": "2.3.0.1",
+        "instancename": "",
+        "port": "330",
+        "dialect": "mssql",
+        "pool": {
+            "max": 9,
+            "idle": 9,
+            "acquire": 200000
+        },
+        "define": {
+            "underscored": false,
+            "freezetablename": false,
+            "charset": "uth9",
+            "dialectOptions": {
+                "collate": "uth9_general_ci"
+            },
+            "timestamps": false
+        },
+        "logging": false,
+        "oauth_publicky": "",
+        "token": {
+            "token_host": "",
+            "token_end_point": "",
+            "token_req_body": {
+                "client_id": "",
+                "client_secret": "",
+                "grant_type": ""
+            }
+        }
+    },
+    "uat": {
+        "username": "root",
+        "password": "",
+        "database": "its",
+        "host": "2.3.0.1",
+        "instancename": "",
+        "port": "330",
+        "dialect": "mssql",
+        "pool": {
+            "max": 9,
+            "idle": 9,
+            "acquire": 200000
+        },
+        "define": {
+            "underscored": false,
+            "freezetablename": false,
+            "charset": "uth9",
+            "dialectOptions": {
+                "collate": "uth9_general_ci"
+            },
+            "timestamps": false
+        },
+        "logging": false,
+        "oauth_publicky": "",
+        "token": {
+            "token_host": "",
+            "token_end_point": "",
+            "token_req_body": {
+                "client_id": "",
+                "client_secret": "",
+                "grant_type": ""
+            }
+        }
+    },
+    "prod": {
+        "username": "root",
+        "password": "",
+        "database": "its",
+        "host": "2.3.0.1",
+        "instancename": "",
+        "port": "330",
+        "dialect": "mssql",
+        "pool": {
+            "max": 9,
+            "idle": 9,
+            "acquire": 200000
+        },
+        "define": {
+            "underscored": false,
+            "freezetablename": false,
+            "charset": "uth9",
+            "dialectOptions": {
+                "collate": "uth9_general_ci"
+            },
+            "timestamps": false
+        },
+        "logging": false,
+        "oauth_publicky": "",
+        "token": {
+            "token_host": "",
+            "token_end_point": "",
+            "token_req_body": {
+                "client_id": "",
+                "client_secret": "",
+                "grant_type": ""
+            }
+        }
+    }
+}

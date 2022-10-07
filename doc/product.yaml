@@ -1,0 +1,425 @@
+paths:
+  /product:
+     post:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Product
+      summary: Add new product.
+      operationId: addNewProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddProductReqObj"
+      responses:
+        200:
+          description: Add new product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    exaple: 200
+                  response:
+                    type: String
+                    example: success
+                  msg:
+                    type: String
+                    example: Product has been added.
+                  productId:
+                    type: integer
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+     get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive all product.
+      operationId: fetchAllProduct
+      tags:
+        - Product
+      parameters:
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Product-List
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/ProductList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /product/SongSpecializationId:
+     get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive all doctors with or without specialization.
+      operationId: fetchAllDoctor
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: SongSpecializationId
+          description: SongSpecialization-ID to fetch specific product data with the associations.
+          required: true
+          schema:
+            type: string
+            example: 1
+      responses:
+        200:
+          description: Doctor-List
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/ProductList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /product/{productId}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive specific product.
+      operationId: fetchSpecificProductData
+      tags:
+       - Product
+      parameters:
+        - in: path
+          name: productId
+          description: Product-ID to fetch specific product data with the associations.
+          required: true
+          schema:
+            type: string
+            example: 1
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: Product-Data
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/ProductData"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+      summary: Update an existing product data.
+      operationId: updateProductData
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: productId
+          description: Product-ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddProductReqObj"
+      responses:
+        200:
+          description: Update product data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  response:
+                    type: string
+                    example: success
+                  msg:
+                    type: string
+                    example: Product data updated successfully. 
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+       - Product
+      summary: Delete product Record.
+      operationId: deleteProductRecord
+      parameters:
+        - in: path
+          name: productId
+          description: Product_ID(productId)
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Delete product Record.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/definitions/successRes"
+                  - $ref: "#/definitions/invalidRes"
+                  - $ref: "#/definitions/errorRes"
+              examples:
+                success:
+                  summary: Example of successful response.
+                  value:
+                    status: 200
+                    response: success
+                    msg: Product has been deleted successfully.
+                invalidId:
+                  summary: Example of invalid response.
+                  value:
+                    status: 401
+                    response: validationerror
+                    msg: Invalid operation.
+                error:
+                  summary: Example of error response.
+                  value:
+                    status: 400
+                    responses: error
+                    msg: Some thing went wrong.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+definitions:
+  ProductData:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      Product:
+        type: object
+        properties:
+          productId:
+            type: integer
+          SongSpecializationId:
+            type: integer
+          songImage:
+            type: string
+          SongName:
+            type: string
+          songSrc:
+            type: string
+          songPrice:
+            type: number
+          songTags:
+            type: string
+          songArtistName:
+            type: string
+          songArtistImage:
+            type: string
+          songArtistRating:
+            type: string
+          songkeys:
+            type: string
+          songDescription:
+            type: string
+          createdAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+          updatedAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+  AddProductReqObj:
+    type: object
+    properties:
+      SongSpecializationId:
+        type: integer
+      songImage:
+        type: string
+      SongName:
+        type: string
+      songSrc:
+        type: string
+      songPrice:
+        type: number
+      songTags:
+        type: string
+      songArtistName:
+        type: string
+      songArtistImage:
+        type: string
+      songArtistRating:
+        type: string
+      songkeys:
+        type: string
+      songDescription:
+        type: string
+      createdAt:
+        type: date
+        example: "2021-08-12T15:42:52.000Z"
+      updatedAt:
+        type: date
+        example: "2021-08-12T15:42:52.000Z"
+  ProductObj:
+    type: array
+    items:
+      type: object
+      properties:
+        productId:
+          type: integer
+        SongSpecializationId:
+          type: integer
+        songImage:
+          type: string
+        SongName:
+          type: string
+        songSrc:
+          type: string
+        songPrice:
+          type: number
+        songTags:
+          type: string
+        songArtistName:
+          type: string
+        songArtistImage:
+          type: string
+        songArtistRating:
+          type: string
+        songkeys:
+          type: string
+        songDescription:
+          type: string
+        createdAt:
+          type: date
+          example: "2021-08-12T15:42:52.000Z"
+        updatedAt:
+          type: date
+          example: "2021-08-12T15:42:52.000Z"
+  ProductList:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      Products:
+        $ref: "#/definitions/ProductObj"
+  Error:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: error
+      msg:
+        type: string
+        example: Some thing went wrong.
+      error:
+        type: object
+        properties:
+          name:
+            type: string
+          errors:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+  successRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      msg:
+        type: string
+        example: Product has been deleted successfully.
+  invalidRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: invailid
+      msg:
+        type: string
+        example: Invailid AdvisorID.
+  errorRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 500
+      response:
+        type: string
+        rxample: error
+      msg:
+        type: string
+        example: Some thing went wrong.

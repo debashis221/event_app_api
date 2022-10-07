@@ -1,0 +1,398 @@
+paths:
+  /users:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive all user.
+      operationId: fetchAllUsers
+      tags:
+        - Users
+      parameters:
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: User-List
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UserList"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    post:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Users
+      summary: Add new user.
+      operationId: addNewUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddUsersReqObj"
+      responses:
+        200:
+          description: Add new user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    exaple: 200
+                  response:
+                    type: String
+                    example: success
+                  msg:
+                    type: String
+                    example: User has been added.
+                  userId:
+                    type: integer
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /users/login:
+    post:
+      security:
+        - bearerAuth: []
+      tags: 
+        - Users
+      summary: User Login.
+      operationId: userLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/UserLoginData"
+      responses:
+        200:
+          description: Add new user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    exaple: 200
+                  response:
+                    type: String
+                    example: success
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+  /users/{userId}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Find and retrive specific user.
+      operationId: fetchSpecificUserData
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: userId
+          description: User-ID to fetch specific user data with the associations.
+          required: true
+          schema:
+            type: string
+            example: 1
+        - in: query
+          name: include
+          description: To fetch all the associations.
+          required: false
+          schema:
+            type: string
+            example: all
+      responses:
+        200:
+          description: User-Data
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/UserData"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      summary: Update an existing user data.
+      operationId: updateUserData
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: userId
+          description: User-ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/AddUsersReqObj"
+      responses:
+        200:
+          description: Update user data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 200
+                  response:
+                    type: string
+                    example: success
+                  msg:
+                    type: string
+                    example: Users data updated successfully.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+       - Users
+      summary: Inactive/deactive User.
+      operationId: changeUserActiveStatus
+      parameters:
+        - in: path
+          name: userId
+          description: User_ID(userId)
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Inactive/deactive User.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/definitions/successRes"
+                  - $ref: "#/definitions/invalidRes"
+                  - $ref: "#/definitions/errorRes"
+              examples:
+                success:
+                  summary: Example of successful response.
+                  value:
+                    status: 200
+                    response: success
+                    msg: User status successfully changed.
+                invalidId:
+                  summary: Example of invalid response.
+                  value:
+                    status: 401
+                    response: validationerror
+                    msg: Invalid operation.
+                error:
+                  summary: Example of error response.
+                  value:
+                    status: 400
+                    responses: error
+                    msg: Some thing went wrong.
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+definitions:
+  UserLoginData:
+    type: object
+    properties:
+      emailId:
+        type: string
+      password:
+        type: string
+  UserData:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      user:
+        type: object
+        properties:
+          userId:
+            type: integer
+          userName:
+            type: string
+          emailId:
+            type: string
+          password:
+            type: string
+          groupId:
+            type: integer
+          userTypeCodeId:
+            type: integer      
+          createdAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+          updatedAt:
+            type: date
+            example: "2021-08-12T15:42:52.000Z"
+          user:
+            type: object
+  AddUsersReqObj:
+    type: object
+    properties:
+      userName:
+        type: string
+      regemailId:
+        type: string
+      regPassword:
+        type: string
+      confirmPassword:
+        type: string
+      groupId:
+        type: integer
+      userTypeCodeId:
+        type: integer      
+  UserObj:
+    type: array
+    items:
+      type: object
+      properties:
+        userId:
+          type: integer
+        userName:
+          type: string
+        emailId:
+          type: string
+        password:
+          type: string
+        groupId:
+          type: integer
+        userTypeCodeId:
+          type: integer 
+        createdAt:
+          type: date
+          example: "2021-08-12T15:42:52.000Z"
+        updatedAt:
+          type: date
+          example: "2021-08-12T15:42:52.000Z"
+  UserList:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      users:
+        $ref: "#/definitions/UserObj"
+  Error:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: error
+      msg:
+        type: string
+        example: Some thing went wrong.
+      error:
+        type: object
+        properties:
+          name:
+            type: string
+          errors:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+  successRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 200
+      response:
+        type: string
+        example: success
+      msg:
+        type: string
+        example: User has been deleted successfully.
+  invalidRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 400
+      response:
+        type: string
+        example: invailid
+      msg:
+        type: string
+        example: Invailid AdvisorID.
+  errorRes:
+    type: object
+    required:
+      - status
+      - response
+    properties:
+      status:
+        type: integer
+        example: 500
+      response:
+        type: string
+        rxample: error
+      msg:
+        type: string
+        example: Some thing went wrong.
