@@ -5,6 +5,7 @@ const groups_controller = require("./user/groups.js");
 const tabs_controller = require("./user/tabs.js");
 const events_controller = require("./events.js");
 const posts_controller = require("./posts.js");
+const gallery_controller = require("./gallery.js");
 const permissiontypes_controller = require("./user/permissionTypes.js");
 const grouppermission_controller = require("./user/groupPermission.js");
 const userTypeCodes_controller = require("./user/userTypeCodes.js");
@@ -78,5 +79,6 @@ module.exports = function (app) {
   app.use("/api/v1/tabs", tabs_controller);
   app.use("/api/v1/events", events_controller);
   app.use("/api/v1/posts", posts_controller);
+  app.use("/api/v1/gallery", gallery_controller);
   app.use("/api/v1/userType", userTypeCodes_controller);
 };
