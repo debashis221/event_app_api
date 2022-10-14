@@ -17,6 +17,11 @@ module.exports = (sequelize, Sequelize) => {
         field: "EventDescription",
         allowNull: false,
       },
+      eventDate: {
+        type: Sequelize.DATE,
+        field: "EventDate",
+        allowNull: false,
+      },
       address: {
         type: Sequelize.STRING(255),
         field: "Address",
