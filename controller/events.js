@@ -56,4 +56,23 @@ router.post("/", upload.array("image"), async (req, res) => {
   }
 });
 
+//Delete
+router.delete("/:eventId", async (req, res) => {
+  try {
+    const eventDLT = await model.TBL_Events.destroy({
+      where: {
+        Id: req.params.eventId,
+      },
+    });
+    res.json({
+      status: 200,
+      response: "success",
+      msg: "event has been deleted successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ ...errResBody, error });
+  }
+});
+
 module.exports = router;
