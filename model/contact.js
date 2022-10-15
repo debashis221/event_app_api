@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
   const TBL_Contact = sequelize.define(
-    "TBL_COntact",
+    "TBL_Contact",
     {
       Id: {
         autoIncrement: true,
@@ -31,5 +31,5 @@ module.exports = (sequelize, Sequelize) => {
     }
   );
   TBL_Contact.removeAttribute("id");
-  return TBL_COntact;
+  return TBL_Contact;
 };
