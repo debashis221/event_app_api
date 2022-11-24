@@ -26,110 +26,30 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Add a new user.
-router.post("/", upload.array("image"), async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    if (
-      typeof req.body.referId === "undefined" ||
-      req.body.referId === "" ||
-      req.body.referId === null
-    ) {
-      if (req.files) {
-        req.body.image = req.files[0].filename;
-      }
-      const token1 = uuid.v1();
-      console.log(token1);
-      req.body.referId = token1.slice(0, 6);
-      req.body.dateLastChanged = new Date();
-      req.body.isActive = 1;
-      // req.body.groupId = 3;
-      req.body.affiliateStatus = 0;
-      if (req.body.confirmPassword === req.body.Password) {
-        const UserResult = await model.TBL_Users.create(req.body);
-        const userData = await model.TBL_Users.findOne({
-          where: {
-            Id: UserResult.Id,
-          },
-        });
-
-        res.json({
-          status: 200,
-          response: "success",
-          msg: "User has been added.",
-          Id: UserResult.Id,
-          userData: userData,
-        });
-      } else {
-        res.json({
-          status: 401,
-          response: "validationerror",
-          msg: "Please send confirm Password.",
-        });
-      }
-    } else {
-      const data = await model.TBL_Settings.findAll({});
-      const userList = await model.TBL_Users.findOne({
+    req.body.dateLastChanged = new Date();
+    req.body.isActive = 1;
+    if (req.body.confirmPassword === req.body.Password) {
+      const UserResult = await model.TBL_Users.create(req.body);
+      const userData = await model.TBL_Users.findOne({
         where: {
-          referId: req.body.referId,
+          Id: UserResult.Id,
         },
       });
-
-      console.log(userList);
-      // console.log(data);
-
-      let total = null;
-
-      total = userList.balance + data[0].referBalance;
-      const user = await model.TBL_Users.update(
-        { balance: total },
-        {
-          where: {
-            Id: userList.Id,
-          },
-        }
-      );
-
-      if (req.files) {
-        req.body.image = req.files[0].filename;
-      }
-      const token = uuid.v1();
-      console.log(token);
-      req.body.referId = token.slice(0, 6);
-      req.body.dateLastChanged = new Date();
-      req.body.isActive = 1;
-      // req.body.groupId = 3;
-      req.body.affiliateStatus = 0;
-      if (req.body.confirmPassword === req.body.Password) {
-        const createUserResult = await model.TBL_Users.create(req.body);
-        const List = await model.TBL_Users.findOne({
-          where: {
-            Id: createUserResult.Id,
-          },
-        });
-
-        if (data && data[0].referStatus == 1) {
-          res.json({
-            status: 200,
-            response: "success",
-            msg: "User has been added.",
-            Id: createUserResult.Id,
-            data: List,
-          });
-        } else {
-          res.json({
-            status: 200,
-            response: "success",
-            msg: "User has been added.",
-            Id: createUserResult.Id,
-            data: List,
-          });
-        }
-      } else {
-        res.json({
-          status: 401,
-          response: "validationerror",
-          msg: "Please send confirm Password.",
-        });
-      }
+      res.json({
+        status: 200,
+        response: "success",
+        msg: "User has been added.",
+        Id: UserResult.Id,
+        userData: userData,
+      });
+    } else {
+      res.json({
+        status: 401,
+        response: "validationerror",
+        msg: "Please send confirm Password.",
+      });
     }
   } catch (error) {
     console.log(error);
