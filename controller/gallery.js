@@ -55,5 +55,23 @@ router.post("/", uploadMultiple, async (req, res) => {
     res.json({ ...errResBody, error });
   }
 });
+//Delete
+router.delete("/:imageId", async (req, res) => {
+  try {
+    const eventDLT = await model.TBL_Gallery.destroy({
+      where: {
+        Id: req.params.imageId,
+      },
+    });
+    res.json({
+      status: 200,
+      response: "success",
+      msg: "Image has been deleted successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ ...errResBody, error });
+  }
+});
 
 module.exports = router;

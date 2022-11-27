@@ -59,5 +59,23 @@ router.post("/", uploadMultiple, async (req, res) => {
     res.json({ ...errResBody, error });
   }
 });
+//Delete
+router.delete("/:postId", async (req, res) => {
+  try {
+    const eventDLT = await model.TBL_Posts.destroy({
+      where: {
+        Id: req.params.postId,
+      },
+    });
+    res.json({
+      status: 200,
+      response: "success",
+      msg: "post has been deleted successfully.",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({ ...errResBody, error });
+  }
+});
 
 module.exports = router;
