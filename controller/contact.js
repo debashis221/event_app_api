@@ -35,11 +35,11 @@ router.post("/", async (req, res) => {
 });
 
 //Delete
-router.delete("/:contactId", async (req, res) => {
+router.post("/delete/:contactId", async (req, res) => {
   try {
     const contactDLT = await model.TBL_Contact.destroy({
       where: {
-        Id: req.params.contactId,
+        Id: req.body.contactId,
       },
     });
     res.json({

@@ -57,11 +57,11 @@ router.post("/", upload.array("image"), async (req, res) => {
 });
 
 //Delete
-router.delete("/:eventId", async (req, res) => {
+router.post("/delete/:eventId", async (req, res) => {
   try {
     const eventDLT = await model.TBL_Events.destroy({
       where: {
-        Id: req.params.eventId,
+        Id: req.body.eventId,
       },
     });
     res.json({

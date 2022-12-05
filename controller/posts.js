@@ -60,11 +60,11 @@ router.post("/", uploadMultiple, async (req, res) => {
   }
 });
 //Delete
-router.delete("/:postId", async (req, res) => {
+router.post("/delete/:postId", async (req, res) => {
   try {
     const eventDLT = await model.TBL_Posts.destroy({
       where: {
-        Id: req.params.postId,
+        Id: req.body.postId,
       },
     });
     res.json({
