@@ -56,7 +56,7 @@ router.post("/", uploadMultiple, async (req, res) => {
   }
 });
 //Delete
-router.post("/delete/:imageId", async (req, res) => {
+router.post("/delete", async (req, res) => {
   try {
     const eventDLT = await model.TBL_Gallery.destroy({
       where: {
