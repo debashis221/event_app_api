@@ -1,114 +1,120 @@
-var Sequelize = require('sequelize'); //sequelize module import
+var Sequelize = require("sequelize"); //sequelize module import
 var fs = require("fs"); //fs module import
 var path = require("path"); //path module import
 
-const env = process.env.NODE_ENV || 'local'; //process env or DEVELOPMENT in default. development
+const env = process.env.NODE_ENV || "local"; //process env or DEVELOPMENT in default. development
 const config = require("../config/config.json")[env];
 
 //connection instances creation for SQl with sequelize.
-const sequelize = new Sequelize(config.database, config.username, config.password, {
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  {
     host: config.host,
     dialect: config.dialect,
+    port: "5847",
     pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    }
-});
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+  }
+);
 
 var db = {};
 
-fs
-    .readdirSync(__dirname)
-    .filter(function(file) {
-        return (file.indexOf(".") !== 0) && (file !== "index.js");
-    })
-    .forEach(function(file) {
-        // var model = sequelize.import(path.join(__dirname, file));
-        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-        db[model.name] = model;
-    });
+fs.readdirSync(__dirname)
+  .filter(function (file) {
+    return file.indexOf(".") !== 0 && file !== "index.js";
+  })
+  .forEach(function (file) {
+    // var model = sequelize.import(path.join(__dirname, file));
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      Sequelize.DataTypes
+    );
+    db[model.name] = model;
+  });
 
-Object.keys(db).forEach(function(modelName) {
-    if ("associate" in db[modelName]) {
-        db[modelName].associate(db);
-    }
+Object.keys(db).forEach(function (modelName) {
+  if ("associate" in db[modelName]) {
+    db[modelName].associate(db);
+  }
 });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-
 db.TBL_Users.belongsTo(db.TBL_Groups, {
-    as: 'group',
-    foreignKey: {
-        name: 'groupId'
-    }
+  as: "group",
+  foreignKey: {
+    name: "groupId",
+  },
 });
 
 db.TBL_Groups.hasMany(db.TBL_Users, {
-    as: 'users',
-    foreignKey: {
-        name: 'groupId'
-    }
+  as: "users",
+  foreignKey: {
+    name: "groupId",
+  },
 });
 
 db.TBL_Users.belongsTo(db.TBL_UserTypeCodes, {
-    as: 'userTypeCode',
-    foreignKey: {
-        name: 'userTypeCodeId'
-    }
+  as: "userTypeCode",
+  foreignKey: {
+    name: "userTypeCodeId",
+  },
 });
 
 db.TBL_UserTypeCodes.hasMany(db.TBL_Users, {
-    as: 'users',
-    foreignKey: {
-        name: 'userTypeCodeId'
-    }
+  as: "users",
+  foreignKey: {
+    name: "userTypeCodeId",
+  },
 });
 
 db.TBL_GroupPermissions.belongsTo(db.TBL_Groups, {
-    as: 'group',
-    foreignKey: {
-        name: 'groupId'
-    }
+  as: "group",
+  foreignKey: {
+    name: "groupId",
+  },
 });
 
 db.TBL_Groups.hasMany(db.TBL_GroupPermissions, {
-    as: 'permission',
-    foreignKey: {
-        name: 'groupId'
-    }
+  as: "permission",
+  foreignKey: {
+    name: "groupId",
+  },
 });
 
 db.TBL_GroupPermissions.belongsTo(db.TBL_Tabs, {
-    as: 'tab',
-    foreignKey: {
-        name: 'tabId'
-    }
+  as: "tab",
+  foreignKey: {
+    name: "tabId",
+  },
 });
 
 db.TBL_Tabs.hasMany(db.TBL_GroupPermissions, {
-    as: 'permission',
-    foreignKey: {
-        name: 'tabId'
-    }
+  as: "permission",
+  foreignKey: {
+    name: "tabId",
+  },
 });
 
 db.TBL_GroupPermissions.belongsTo(db.TBL_PermissionTypes, {
-    as: 'permissionType',
-    foreignKey: {
-        name: 'permissionTypeId'
-    }
+  as: "permissionType",
+  foreignKey: {
+    name: "permissionTypeId",
+  },
 });
 
 db.TBL_PermissionTypes.hasMany(db.TBL_GroupPermissions, {
-    as: 'permissions',
-    foreignKey: {
-        name: 'permissionTypeId'
-    }
+  as: "permissions",
+  foreignKey: {
+    name: "permissionTypeId",
+  },
 });
-
 
 module.exports = db;
