@@ -1,11 +1,11 @@
 {
     "local": {
         "username": "root",
-        "password": "Debashissaha2@",
-        "database": "api",
-        "host": "35.195.87.127",
+        "password": "0OQOj9sYktkhwUZ7fqLF",
+        "database": "railway",
+        "host": "containers-us-west-164.railway.app",
         "instancename": "",
-        "port": "3306",
+        "port": "5847",
         "dialect": "mysql",
         "pool": {
             "max": 9,
