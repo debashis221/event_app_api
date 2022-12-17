@@ -1,9 +1,9 @@
 {
     "local": {
         "username": "root",
-        "password": "",
-        "database": "excite_event",
-        "host": "localhost",
+        "password": "Debashissaha2@",
+        "database": "api",
+        "host": "35.195.87.127",
         "instancename": "",
         "port": "3306",
         "dialect": "mysql",
