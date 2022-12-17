@@ -50,7 +50,9 @@ model.sequelize
   })
   .then(function () {
     console.log("Starting up server....");
-    app.listen();
+    app.listen(3000, function () {
+      console.log("Lisenting at port 3000");
+    });
   });
 
 module.exports = app;
