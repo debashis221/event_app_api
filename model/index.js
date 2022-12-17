@@ -7,12 +7,12 @@ const config = require("../config/config.json")[env];
 
 //connection instances creation for SQl with sequelize.
 const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
+  config.local.database,
+  config.local.username,
+  config.local.password,
   {
-    host: config.host,
-    dialect: config.dialect,
+    host: config.local.host,
+    dialect: config.local.dialect,
     port: "5847",
     pool: {
       max: 5,
