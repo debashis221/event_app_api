@@ -6,22 +6,17 @@ const env = process.env.NODE_ENV || "local"; //process env or DEVELOPMENT in def
 const config = require("../config/config.json")[env];
 
 //connection instances creation for SQl with sequelize.
-const sequelize = new Sequelize(
-  config.local.database,
-  config.local.username,
-  config.local.password,
-  {
-    host: config.local.host,
-    dialect: config.local.dialect,
-    port: "5847",
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000,
-    },
-  }
-);
+const sequelize = new Sequelize("railway", "root", "0OQOj9sYktkhwUZ7fqLF", {
+  host: "containers-us-west-164.railway.app",
+  dialect: "mysql",
+  port: "5847",
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+});
 
 var db = {};
 
