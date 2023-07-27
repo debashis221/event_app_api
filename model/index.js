@@ -6,10 +6,10 @@ const env = process.env.NODE_ENV || "local"; //process env or DEVELOPMENT in def
 const config = require("../config/config.json")[env];
 
 //connection instances creation for SQl with sequelize.
-const sequelize = new Sequelize("railway", "root", "GDRAniQ6uarPBA0vSTF3", {
-  host: "containers-us-west-164.railway.app",
-  dialect: "mysql",
-  port: "5847",
+const sequelize = new Sequelize("eventappapi", "eventappapi_user", "jfXfnB4w1KPxAcLDnLyXyVQYKFM4ZVhP", {
+  host: "dpg-cj19bldph6enmk126g4g-a.frankfurt-postgres.render.com/eventappapi",
+  dialect: "postgres",
+  port: "5432",
   pool: {
     max: 5,
     min: 0,
