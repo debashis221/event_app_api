@@ -1,12 +1,12 @@
 {
     "local": {
-        "username": "root",
-        "password": "0OQOj9sYktkhwUZ7fqLF",
-        "database": "railway",
-        "host": "containers-us-west-164.railway.app",
+        "username": "eventappapi_user",
+        "password": "jfXfnB4w1KPxAcLDnLyXyVQYKFM4ZVhP",
+        "database": "eventappapi",
+        "host": "dpg-cj19bldph6enmk126g4g-a.frankfurt-postgres.render.com/eventappapi",
         "instancename": "",
-        "port": "5847",
-        "dialect": "mysql",
+        "port": "5432",
+        "dialect": "postgres",
         "pool": {
             "max": 9,
             "idle": 9,
