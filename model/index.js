@@ -7,7 +7,7 @@ const config = require("../config/config.json")[env];
 
 //connection instances creation for SQl with sequelize.
 const sequelize = new Sequelize(
-  "postgres://eventappapi_user:jfXfnB4w1KPxAcLDnLyXyVQYKFM4ZVhP@dpg-cj19bldph6enmk126g4g-a.frankfurt-postgres.render.com/eventappapi"
+  "postgres://eventappapi_user:jfXfnB4w1KPxAcLDnLyXyVQYKFM4ZVhP@dpg-cj19bldph6enmk126g4g-a.frankfurt-postgres.render.com/eventappapi?ssl=true"
 );
 
 var db = {};
