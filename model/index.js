@@ -48,20 +48,6 @@ db.TBL_Groups.hasMany(db.TBL_Users, {
   },
 });
 
-db.TBL_Users.belongsTo(db.TBL_UserTypeCodes, {
-  as: "userTypeCode",
-  foreignKey: {
-    name: "userTypeCodeId",
-  },
-});
-
-db.TBL_UserTypeCodes.hasMany(db.TBL_Users, {
-  as: "users",
-  foreignKey: {
-    name: "userTypeCodeId",
-  },
-});
-
 db.TBL_GroupPermissions.belongsTo(db.TBL_Groups, {
   as: "group",
   foreignKey: {
