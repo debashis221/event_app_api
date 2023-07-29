@@ -30,7 +30,7 @@ app.use(
 app.use(body_parser.json({ limit: "50mb", extented: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use("/uploads", express.static("uploads"));
+app.use("uploads", express.static("uploads"));
 app.use(function (err, req, res, next) {
   res.status(statusFiveHundred).send("Somthing broke !");
 });
