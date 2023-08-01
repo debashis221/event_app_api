@@ -24,8 +24,21 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
-
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+    }
+  },
+});
 // Get all event list.
 router.get("/", async (req, res) => {
   try {
@@ -36,23 +49,27 @@ router.get("/", async (req, res) => {
     res.json({ ...errResBody, error });
   }
 });
-var uploadMultiple = upload.fields([{ name: "image", maxCount: 10 }]);
 //create event
-router.post("/", uploadMultiple, async (req, res) => {
+router.post("/", upload.array("image", 100), async (req, res) => {
   try {
     if (req.files) {
-      req.body.image = req.files.image[0].filename;
+      for (let index = 0; index < req.files.length; index++) {
+        await model.TBL_Gallery.create({
+          name: req.body.name,
+          image: req.files[index].filename,
+        });
+      }
     }
-    const GalleryResult = await model.TBL_Gallery.create(req.body);
-    res.json({
-      status: 200,
-      response: "success",
-      msg: "Image has been added.",
-      galleryData: GalleryResult,
-    });
+    res
+      .json({
+        status: 200,
+        response: "success",
+        msg: "Image has been added.",
+      })
+      .end();
   } catch (error) {
     console.log(error);
-    res.json({ ...errResBody, error });
+    res.json({ ...errResBody, error }).end();
   }
 });
 //Delete
